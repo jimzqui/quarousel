@@ -3,13 +3,13 @@
 This project is a sample demonstration of a slider made from Quarousel. Quarousel is a jQuery slider plugin with stunning effects and compatible to Bootstrap's carousel component. Currently have 4 effects and multiple animation variants. Planning to add 50 more.
 
 ## Basic Usage
-<code>
+```javascript
 	$('#quarousel').quarousel();
-</code>
+```
 
 ## More Options
 The default options below works same way as the Bootstrap's carousel. Example, interval indicates how many seconds it auto-slide. Setting interval to false stops the auto-slide.
-<code>
+```javascript
 	$('#quarousel').quarousel({
 		indicators: '.carousel-indicators',
         wrapper: '.carousel-inner',
@@ -23,39 +23,39 @@ The default options below works same way as the Bootstrap's carousel. Example, i
         wrap: false,
         effect: 'carousel'
 	});
-</code>
+```
 
 ## Pause
-<code>
+```javascript
 	$('#quarousel').quarousel('pause');
-</code>
+```
 
 ## Cycle
-<code>
+```javascript
 	$('#quarousel').quarousel('cycle');
-</code>
+```
 
 ## Carousel Effect
-<code>
+```javascript
 	$('#quarousel').quarousel({
 		effect: {
             name: 'carousel',
             easing: 'easeInOutQuart' // easeInOutQuart, easeInSine, easeOutSine, easeInOutSine with 18 more. Refer to http://easings.net/
         }
 	});
-</code>
+```
 
 ## Fade Effect
-<code>
+```javascript
 	$('#quarousel').quarousel({
 		effect: {
             name: 'fade',
         }
 	});
-</code>
+```
 
 ## Box Effect
-<code>
+```javascript
 	$('#quarousel').quarousel({
 		effect: {
             name: 'box',
@@ -66,10 +66,10 @@ The default options below works same way as the Bootstrap's carousel. Example, i
             y: 5
         }
 	});
-</code>
+```
 
 ## Slice Effect
-<code>
+```javascript
 	$('#quarousel').quarousel({
 		effect: {
             name: 'slice',
@@ -81,7 +81,7 @@ The default options below works same way as the Bootstrap's carousel. Example, i
             y: 5
         }
 	});
-</code>
+```
 
 * Author: Jimbo Quijano
 * Homepage: jimboquijano.com
