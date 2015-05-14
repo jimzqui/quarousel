@@ -59,8 +59,8 @@ $('#quarousel').quarousel({
 $('#quarousel').quarousel({
 	effect: {
         name: 'box',
-        type: 'slant', // slant, swirl, horizontal, vertical
-        start: 'topleft', // topleft, topright, botleft, botright
+        type: 'slant', // slant, swirl, horizontal, vertical, random
+        start: 'topleft', // topleft, topright, botleft, botright, random
         interval: 50,
         x: 10,
         y: 5
@@ -74,8 +74,8 @@ $('#quarousel').quarousel({
 	effect: {
         name: 'slice',
         easing: 'easeInOutQuart', // easeInOutQuart, easeInSine with 20 more. Refer to http://easings.net/
-        type: 'vertical', // vertical, horizontal
-        start: 'right', // right, left, top, bottom
+        type: 'vertical', // vertical, horizontal, random
+        start: 'right', // right, left, top, bottom, random
         interval: 50,
         x: 10,
         y: 5
