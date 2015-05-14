@@ -83,18 +83,18 @@ $('#quarousel').quarousel({
 });
 ```
 
-## Before Slide Event
-This event fires immediately when the slide instance method is invoked.
+## Before Slide Event (slide.qs)
+This event fires immediately when the slide instance method is invoked. Bootstrap's slide.bs.carousel will also work.
 ```javascript
-$('#quarousel').on('slide.bs.carousel', function (e, active) {
+$('#quarousel').on('slide.qs', function (e, active) {
     // do someting...
 });
 ```
 
-## After Slide Event
-This event is fired when the carousel has completed its slide transition.
+## After Slide Event (slid.qs)
+This event is fired when the carousel has completed its slide transition. Bootstrap's slid.bs.carousel will also work.
 ```javascript
-$('#quarousel').on('slid.bs.carousel', function (e, active) {
+$('#quarousel').on('slid.qs', function (e, active) {
     // do someting...
 });
 ```
