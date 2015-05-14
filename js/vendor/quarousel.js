@@ -600,6 +600,7 @@ if (typeof define === 'function' && define.amd) {
 
         // Effect defaults
         that._defaults = {
+            speed: 600,
             effect: {
                 name: 'fade',
             }
@@ -678,7 +679,7 @@ if (typeof define === 'function' && define.amd) {
 
         // Effect defaults
         that._defaults = {
-            speed: 300,
+            speed: 600,
             effect: {
                 name: 'box',
                 type: 'slant',
