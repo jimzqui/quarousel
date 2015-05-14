@@ -81,6 +81,21 @@ $('#quarousel').quarousel({
         y: 5
     }
 });
+
+## Before Slide Event
+This event fires immediately when the slide instance method is invoked.
+```javascript
+$('#quarousel').on('slide.bs.carousel', function (e, active) {
+    // do someting...
+});
+```
+
+## After Slide Event
+This event is fired when the carousel has completed its slide transition.
+```javascript
+$('#quarousel').on('slid.bs.carousel', function (e, active) {
+    // do someting...
+});
 ```
 
 * Author: Jimbo Quijano

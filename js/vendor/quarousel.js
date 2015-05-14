@@ -201,6 +201,7 @@ if (typeof define === 'function' && define.amd) {
         that.active = that.activeItem();
 
         // Slide in
+        that.el.main.trigger('slide.bs.carousel', [that.active]);
         that.animating = true;
         that.effect.in();
 
@@ -215,6 +216,8 @@ if (typeof define === 'function' && define.amd) {
             that.el.items
             .removeClass('active')
             .eq(that.coming.index()).addClass('active');
+
+            that.el.main.trigger('slid.bs.carousel', [that.active]);
         });
     };
 
