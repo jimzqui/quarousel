@@ -385,6 +385,101 @@ if (typeof define === 'function' && define.amd) {
         box.find('span').css(pos);
     };
 
+    // Construct swirl animation path
+    Plugin.prototype.swirlPath = function(x, y) {
+        var that = this;
+        var xpath = x;
+        var ypath = y;
+        var path = 0;
+        var swirl = -1;
+        var change = 0;
+        var arr = [];
+
+        for (var i = 0; i < y; i++) {
+            for (var j = 0; j < x; j++) {
+                switch(path) {
+                    case 0:
+                        swirl = parseInt(swirl) + parseInt(1);
+                        change += 1;
+                        if (change == xpath) {
+                            ypath -= 1;
+                            path += 1;
+                            change = 0;
+                        }
+                    break;
+                    case 1:
+                        swirl = parseInt(swirl) + parseInt(x);
+                        change += 1;
+                        if (change == ypath) {
+                            xpath -= 1;
+                            path += 1;
+                            change = 0;
+                        }
+                    break;
+                    case 2:
+                        swirl = parseInt(swirl) - parseInt(1);
+                        change += 1;
+                        if (change == xpath) {
+                            ypath -= 1;
+                            path += 1;
+                            change = 0;
+                        }
+                    break;
+                    case 3:
+                        swirl = parseInt(swirl) - parseInt(x);
+                        change += 1;
+                        if (change == ypath) {
+                            xpath -= 1;
+                            path = 0;
+                            change = 0;
+                        }
+                    break;
+                }
+
+                swirl = (swirl < 10) ? '0' + swirl : swirl;
+                arr.push(swirl);
+            };
+        };
+
+        return arr;
+    };
+
+    // Construct scatter animation path
+    Plugin.prototype.scatterPath = function(x, y) {
+        var that = this;
+        var arr = [];
+        var total = x * y;
+
+        for (var i = 0; i < total; i++) {
+            var scatter = i;
+            scatter = (scatter < 10) ? '0' + scatter : scatter;
+            arr.push(scatter);
+        };
+
+        return that.shuffleArr(arr);
+    };
+
+    // Shuffle array
+    Plugin.prototype.shuffleArr = function(arr) {
+        var that = this;
+        var cur_index = arr.length, temp_value, rand_index;
+
+        // While there remain elements to shuffle
+        while (0 !== cur_index) {
+
+            // Pick a remaining element
+            rand_index = Math.floor(Math.random() * cur_index);
+            cur_index -= 1;
+
+            // And swap it with the current element
+            temp_value = arr[cur_index];
+            arr[cur_index] = arr[rand_index];
+            arr[rand_index] = temp_value;
+        }
+
+        return arr;
+    };
+
     /*!
      * Effect constructor
      * Carousel
@@ -695,8 +790,8 @@ if (typeof define === 'function' && define.amd) {
 
         // If animation type is random
         if (that.qs._defaults.effect.type == 'random') {
-            var rand = Math.floor(Math.random() * 4);
-            var arr = ['slant', 'horizontal', 'vertical', 'swirl'];
+            var rand = Math.floor(Math.random() * 5);
+            var arr = ['slant', 'horizontal', 'vertical', 'swirl', 'scatter'];
             var type = arr[rand];
         } else {
             var type = that.qs._defaults.effect.type;
@@ -708,13 +803,13 @@ if (typeof define === 'function' && define.amd) {
                 var count = 0;
                 for (var i = 0; i < that.qs._defaults.effect.y; i++) {
                     for (var j = 0; j < that.qs._defaults.effect.x; j++) {
-                        (function(j, i, count, interval, speed, promise) {
+                        (function(j, i, count, promise) {
                             setTimeout(function() {
-                                that.qs.active.find('.box' + i + j).fadeOut(speed, function() {
+                                that.qs.active.find('.box' + i + j).fadeOut(that.qs._defaults.speed, function() {
                                     promise.resolve();
                                 });
-                            }, interval * (j + i));
-                        })(j, i, count, that.qs._defaults.effect.interval, that.qs._defaults.speed, promises[count] = $.Deferred());
+                            }, that.qs._defaults.effect.interval * (j + i));
+                        })(j, i, count, promises[count] = $.Deferred());
                         count++;
                     };
                 };
@@ -723,13 +818,13 @@ if (typeof define === 'function' && define.amd) {
                 var count = 0;
                 for (var i = 0; i < that.qs._defaults.effect.y; i++) {
                     for (var j = 0; j < that.qs._defaults.effect.x; j++) {
-                        (function(j, i, count, interval, speed, promise) {
+                        (function(j, i, count, promise) {
                             setTimeout(function() {
-                                that.qs.active.find('.box' + i + j).fadeOut(speed, function() {
+                                that.qs.active.find('.box' + i + j).fadeOut(that.qs._defaults.speed, function() {
                                     promise.resolve();
                                 });
-                            }, interval * count);
-                        })(j, i, count, that.qs._defaults.effect.interval, that.qs._defaults.speed, promises[count] = $.Deferred());
+                            }, that.qs._defaults.effect.interval * count);
+                        })(j, i, count, promises[count] = $.Deferred());
                         count++;
                     };
                 };
@@ -738,91 +833,56 @@ if (typeof define === 'function' && define.amd) {
                 var count = 0;
                 for (var i = 0; i < that.qs._defaults.effect.x; i++) {
                     for (var j = 0; j < that.qs._defaults.effect.y; j++) {
-                        (function(j, i, count, interval, speed, promise) {
+                        (function(j, i, count, promise) {
                             setTimeout(function() {
-                                that.qs.active.find('.box' + j + i).fadeOut(speed, function() {
+                                that.qs.active.find('.box' + j + i).fadeOut(that.qs._defaults.speed, function() {
                                     promise.resolve();
                                 });
-                            }, interval * count);
-                        })(j, i, count, that.qs._defaults.effect.interval, that.qs._defaults.speed, promises[count] = $.Deferred());
+                            }, that.qs._defaults.effect.interval * count);
+                        })(j, i, count, promises[count] = $.Deferred());
                         count++;
                     };
                 };
             break;
             case 'swirl':
                 var count = 0;
-                var xpath = that.qs._defaults.effect.x;
-                var ypath = that.qs._defaults.effect.y;
-                var path = 0;
-                var swirl = -1;
-                var change = 0;
-                for (var i = 0; i < that.qs._defaults.effect.y; i++) {
-                    for (var j = 0; j < that.qs._defaults.effect.x; j++) {
-                        (function(j, i, count, interval, speed, promise) {
-
-                            switch(path) {
-                                case 0:
-                                    swirl = parseInt(swirl) + parseInt(1);
-                                    change += 1;
-                                    if (change == xpath) {
-                                        ypath -= 1;
-                                        path += 1;
-                                        change = 0;
-                                    }
-                                break;
-                                case 1:
-                                    swirl = parseInt(swirl) + parseInt(that.qs._defaults.effect.x);
-                                    change += 1;
-                                    if (change == ypath) {
-                                        xpath -= 1;
-                                        path += 1;
-                                        change = 0;
-                                    }
-                                break;
-                                case 2:
-                                    swirl = parseInt(swirl) - parseInt(1);
-                                    change += 1;
-                                    if (change == xpath) {
-                                        ypath -= 1;
-                                        path += 1;
-                                        change = 0;
-                                    }
-                                break;
-                                case 3:
-                                    swirl = parseInt(swirl) - parseInt(that.qs._defaults.effect.x);
-                                    change += 1;
-                                    if (change == ypath) {
-                                        xpath -= 1;
-                                        path = 0;
-                                        change = 0;
-                                    }
-                                break;
-                            }
-
-                            swirl = (swirl < 10) ? '0' + swirl : swirl;
-                            var box_el = '.box' + swirl;
-
-                            setTimeout(function() {
-                                that.qs.active.find(box_el).fadeOut(speed, function() {
-                                    promise.resolve();
-                                });
-                            }, interval * count);
-                        })(j, i, count, that.qs._defaults.effect.interval, that.qs._defaults.speed, promises[count] = $.Deferred());
-                        count++;
-                    };
+                var path = that.qs.swirlPath(that.qs._defaults.effect.x, that.qs._defaults.effect.y);
+                for (var i = 0; i < path.length; i++) {
+                    (function(i, count, promise) {
+                        setTimeout(function() {
+                            that.qs.active.find('.box' + path[i]).fadeOut(that.qs._defaults.speed, function() {
+                                promise.resolve();
+                            });
+                        }, that.qs._defaults.effect.interval * count);
+                    })(i, count, promises[count] = $.Deferred());
+                    count++;
+                };
+            break;
+            case 'scatter':
+                var count = 0;
+                var path = that.qs.scatterPath(that.qs._defaults.effect.x, that.qs._defaults.effect.y);
+                for (var i = 0; i < path.length; i++) {
+                    (function(i, count, promise) {
+                        setTimeout(function() {
+                            that.qs.active.find('.box' + path[i]).fadeOut(that.qs._defaults.speed, function() {
+                                promise.resolve();
+                            });
+                        }, that.qs._defaults.effect.interval * (count / 2));
+                    })(i, count, promises[count] = $.Deferred());
+                    count++;
                 };
             break;
             default:
                 var count = 0;
                 for (var i = 0; i < that.qs._defaults.effect.y; i++) {
                     for (var j = 0; j < that.qs._defaults.effect.x; j++) {
-                        (function(j, i, count, interval, speed, promise) {
+                        (function(j, i, count, promise) {
                             setTimeout(function() {
-                                that.qs.active.find('.box' + i + j).fadeOut(speed, function() {
+                                that.qs.active.find('.box' + i + j).fadeOut(that.qs._defaults.speed, function() {
                                     promise.resolve();
                                 });
-                            }, interval * (j + i));
-                        })(j, i, count, that.qs._defaults.effect.interval, that.qs._defaults.speed, promises[count] = $.Deferred());
+                            }, that.qs._defaults.effect.interval * (j + i));
+                        })(j, i, count, promises[count] = $.Deferred());
                         count++;
                     };
                 };
@@ -1079,7 +1139,7 @@ if (typeof define === 'function' && define.amd) {
         // Construct boxes
         var count = 0;
         for (var i = 0; i < z; i++) {
-            (function(i, count, interval, speed, promise) {
+            (function(i, count, promise) {
                 setTimeout(function() {
                     var box_el = that.qs.coming.find('.box' + i);
 
@@ -1089,10 +1149,10 @@ if (typeof define === 'function' && define.amd) {
 
                     setTimeout(function() {
                         promise.resolve();
-                    }, speed + 100)
+                    }, that.qs._defaults.speed + 100)
                     
-                }, interval * count);
-            })(i, count, that.qs._defaults.effect.interval, that.qs._defaults.speed, promises[count] = $.Deferred());
+                }, that.qs._defaults.effect.interval * count);
+            })(i, count, promises[count] = $.Deferred());
             count++;
         };
 

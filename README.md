@@ -59,7 +59,7 @@ $('#quarousel').quarousel({
 $('#quarousel').quarousel({
 	effect: {
         name: 'box',
-        type: 'slant', // slant, swirl, horizontal, vertical, random
+        type: 'slant', // slant, swirl, scatter, horizontal, vertical, random
         start: 'topleft', // topleft, topright, botleft, botright, random
         interval: 50,
         x: 10,
