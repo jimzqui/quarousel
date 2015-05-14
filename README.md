@@ -81,6 +81,7 @@ $('#quarousel').quarousel({
         y: 5
     }
 });
+```
 
 ## Before Slide Event
 This event fires immediately when the slide instance method is invoked.
