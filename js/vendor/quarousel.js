@@ -987,10 +987,7 @@ if (typeof define === 'function' && define.amd) {
         // Reconstruct slide items if type is random
         if (that.qs._defaults.effect.type == 'random' 
         || that.qs._defaults.effect.start == 'random') {
-            that.qs.el.items.each(function() {
-                var item = $(this).empty();
-                that.construct(item, that._type, that._start);
-            });
+            that.construct(that.qs.coming, that._type, that._start);
         }
 
         // Setup
