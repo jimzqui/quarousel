@@ -4,9 +4,9 @@ Quarousel is a jQuery slider plugin with stunning effects and compatible to Boot
 
 ### Installation
 Include script after the jQuery library, unless you are packaging scripts somehow else.
-<code>
+```html
 <script src="/path/to/quarousel.js"></script>
-</code>
+```
 
 ### Basic Usage
 ```javascript
