@@ -1,5 +1,4 @@
 # Quarousel v1.0 (Work on Progress)
-Added at March 14, 2015
 
 Quarousel is a jQuery slider plugin with stunning effects and compatible to Bootstrap's carousel component. This project was added on March 15, 2015 after a 3 day hackaton and is still a "Work in Progress". Currently have 5+ effects with multiple animation variations. Planning to add dozen more effect before release.
 
