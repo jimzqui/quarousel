@@ -186,6 +186,7 @@ if (typeof define === 'function' && define.amd) {
             case 'fade': that.effect = new Effect_Fade(that); break;
             case 'box': that.effect = new Effect_Box(that); break;
             case 'slice': that.effect = new Effect_Slice(that); break;
+            case 'shift': that.effect = new Effect_Shift(that); break;
             default: that.effect = new Effect_Carousel(that);
         }
     };
@@ -312,14 +313,13 @@ if (typeof define === 'function' && define.amd) {
         return item;
     };
 
-    // Get aspect ratio of item image based on main container
-    Plugin.prototype.aspectRatio = function(item) {
+    // Get aspect ratio of item image based on container
+    Plugin.prototype.aspectRatio = function(width, height) {
         var that = this;
-        var img = item.find('img');
 
         return {
-            height: img.height() / img.width() * that._defaults.width,
-            width: img.width() / img.height() * that._defaults.height
+            height: height / width * that._defaults.width,
+            width: width / height * that._defaults.height
         };
     };
 
@@ -679,7 +679,7 @@ if (typeof define === 'function' && define.amd) {
 
         // Effect defaults
         that._defaults = {
-            speed: 600,
+            speed: 500,
             effect: {
                 name: 'box',
                 type: 'slant',
@@ -1161,6 +1161,193 @@ if (typeof define === 'function' && define.amd) {
             that.qs.active.hide().find('div').hide();
             if (callback != undefined) callback();
         });
+    };
+
+    /*!
+     * Effect constructor
+     * Shift
+     */
+    function Effect_Shift(qs) {
+        var that = this;
+        that.qs = qs;
+
+        // Effect defaults
+        that._defaults = {
+            speed: 1000,
+            effect: {
+                name: 'shift',
+                easing: 'easeInOutQuart',
+                start: 'direction'
+            }
+        };
+
+        // Update settings
+        that.qs._defaults = $.extend(true, {}, that._defaults, that.qs._options);
+        that.qs._defaults = $.extend(true, {}, defaults, that.qs._defaults);
+
+        // Construct slide items
+        that.qs.el.items.each(function() {
+            that.construct($(this));
+        });
+    }
+
+    // Construct slide item
+    Effect_Shift.prototype.construct = function (item) {
+        var that = this;
+        var src = item.find('img').attr('src');
+        var title = item.find('img').attr('title');
+
+        item.css({
+            display: 'block',
+            position: 'absolute',
+            width: that.qs._defaults.width,
+            height: that.qs._defaults.height,
+            overflow: 'hidden',
+            transition: 'none',
+            WebkitTransition: 'none',
+            top: 0
+        }).html('<div></div>').data('title', title);
+
+        item.find('div').css({
+            position: 'absolute',
+            backgroundImage: 'url(' + src + ')',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            width: '100%',
+            height: '100%',
+            left: '50%',
+            top: '50%',
+            margin: '-' + (that.qs._defaults.height / 2) + 'px 0 0 -' + (that.qs._defaults.width / 2) + 'px',
+            transition: 'all ' + that.qs._defaults.speed + 'ms ' + that.qs.getEasing(that.qs._defaults.effect.easing),
+            WebkitTransition: 'all ' + that.qs._defaults.speed + 'ms ' + that.qs.getEasing(that.qs._defaults.effect.easing)
+        });
+
+        if (item.is('.active')) {
+            item.css({
+                left: 0
+            });
+        } else {
+            item.css({
+                left: that.qs._defaults.width
+            });
+        }
+    };
+
+    // Get start
+    Effect_Shift.prototype.getStart = function () {
+        var that = this;
+
+        // If start point is random
+        if (that.qs._defaults.effect.start == 'random') {
+            var rand = Math.floor(Math.random() * 5);
+            var arr = ['top', 'bottom', 'left', 'right', 'direction'];
+            var start = arr[rand];
+        } else {
+            var start = that.qs._defaults.effect.start;
+        }
+
+        return start;
+    };
+
+    // Coming item slide in
+    Effect_Shift.prototype.in = function () {
+        var that = this;
+
+        // Setup
+        that.qs.coming.queue(function() {
+            $(this).css({
+                display: 'block',
+                zIndex: 2,
+                transition: 'none',
+                WebkitTransition: 'none'
+            }).dequeue();
+
+            that.qs.active.css({
+                display: 'block',
+                zIndex: 1
+            });
+        });
+
+        that.qs.coming.queue(function() {
+            switch(that.getStart()) {
+                case 'left': 
+                    var pos = {
+                        left: that.qs._defaults.width * -1,
+                        top: 0
+                    }; 
+                break;
+                case 'right': 
+                    var pos = {
+                        left: that.qs._defaults.width,
+                        top: 0
+                    };
+                break;
+                case 'top': 
+                    var pos = {
+                        top: that.qs._defaults.height * 1,
+                        left: 0
+                    };
+                break;
+                case 'bottom': 
+                    var pos = {
+                        top: that.qs._defaults.height,
+                        left: 0
+                    };
+                break;
+                case 'direction':
+                    var pos = {
+                        left: (that.qs.action == 'next') ? that.qs._defaults.width : that.qs._defaults.width * -1,
+                        top: 0
+                    };
+                break;
+                default: 
+                    var pos = {
+                        left: that.qs._defaults.width * -1,
+                        top: 0
+                    }; 
+            }
+
+            $(this).delay(100).css(pos).dequeue();
+        });
+
+        that.qs.coming.queue(function() {
+            $(this).delay(1).css({
+                transition: 'all ' + that.qs._defaults.speed + 'ms ' + that.qs.getEasing(that.qs._defaults.effect.easing),
+                WebkitTransition: 'all ' + that.qs._defaults.speed + 'ms ' + that.qs.getEasing(that.qs._defaults.effect.easing)
+            }).dequeue();
+        });
+
+        that.qs.coming.queue(function() {
+            $(this).delay(1).css({
+                left: 0,
+                top: 0
+            }).dequeue();
+        });
+    };
+
+    // Active item slide in
+    Effect_Shift.prototype.out = function (callback) {
+        var that = this;
+
+        // Animate out
+        setTimeout(function() {
+            that.qs.active.find('div').css({
+                width: '50%',
+                height: '50%',
+                margin: '-' + (that.qs._defaults.height / 4) + 'px 0 0 -' + (that.qs._defaults.width / 4) + 'px'
+            });
+        }, 100);
+
+        setTimeout(function() {
+            that.qs.active.hide().find('div').css({
+                width: '100%',
+                height: '100%',
+                margin: '-' + (that.qs._defaults.height / 2) + 'px 0 0 -' + (that.qs._defaults.width / 2) + 'px'
+            });
+
+            if (callback != undefined) callback();
+        }, that.qs._defaults.speed + 100);
     };
 
     // A really lightweight plugin wrapper around the constructor, 

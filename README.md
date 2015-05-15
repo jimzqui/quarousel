@@ -1,13 +1,20 @@
 # Quarousel v1.0 (Work on Progress)
+Added at March 14, 2015
 
-This project is a sample demonstration of a slider made from Quarousel. Quarousel is a jQuery slider plugin with stunning effects and compatible to Bootstrap's carousel component. Currently have 4 effects and multiple animation variants. Planning to add 50 more.
+Quarousel is a jQuery slider plugin with stunning effects and compatible to Bootstrap's carousel component. This project was added on March 15, 2015 after a 3 day hackaton and is still a "Work in Progress". Currently have 5+ effects with multiple animation variations. Planning to add dozen more effect before release.
 
-## Basic Usage
+### Installation
+Include script after the jQuery library, unless you are packaging scripts somehow else.
+<code>
+<script src="/path/to/quarousel.js"></script>
+</code>
+
+### Basic Usage
 ```javascript
 $('#quarousel').quarousel();
 ```
 
-## More Options
+### More Options
 The default options below works same way as the Bootstrap's carousel. Example, interval indicates how many seconds it auto-slide. Setting interval to false stops the auto-slide.
 ```javascript
 $('#quarousel').quarousel({
@@ -25,17 +32,17 @@ $('#quarousel').quarousel({
 });
 ```
 
-## Pause
+### Pause
 ```javascript
 $('#quarousel').quarousel('pause');
 ```
 
-## Cycle
+### Cycle
 ```javascript
 $('#quarousel').quarousel('cycle');
 ```
 
-## Carousel Effect
+### Carousel Effect
 ```javascript
 $('#quarousel').quarousel({
 	effect: {
@@ -45,7 +52,7 @@ $('#quarousel').quarousel({
 });
 ```
 
-## Fade Effect
+### Fade Effect
 ```javascript
 $('#quarousel').quarousel({
 	effect: {
@@ -54,7 +61,7 @@ $('#quarousel').quarousel({
 });
 ```
 
-## Box Effect
+### Box Effect
 ```javascript
 $('#quarousel').quarousel({
 	effect: {
@@ -68,7 +75,7 @@ $('#quarousel').quarousel({
 });
 ```
 
-## Slice Effect
+### Slice Effect
 ```javascript
 $('#quarousel').quarousel({
 	effect: {
@@ -83,7 +90,18 @@ $('#quarousel').quarousel({
 });
 ```
 
-## Before Slide Event (slide.qs)
+### Switch Effect
+```javascript
+$('#quarousel').quarousel({
+	effect: {
+        name: 'shift',
+        easing: 'easeInOutQuart', // easeInOutQuart, easeInSine with 20 more. Refer to http://easings.net/
+        start: 'direction' // direction, left, top, right, bottom, random
+    }
+});
+```
+
+### Before Slide Event (slide.qs)
 This event fires immediately when the slide instance method is invoked. Bootstrap's slide.bs.carousel will also work.
 ```javascript
 $('#quarousel').on('slide.qs', function (e, active) {
@@ -91,7 +109,7 @@ $('#quarousel').on('slide.qs', function (e, active) {
 });
 ```
 
-## After Slide Event (slid.qs)
+### After Slide Event (slid.qs)
 This event is fired when the carousel has completed its slide transition. Bootstrap's slid.bs.carousel will also work.
 ```javascript
 $('#quarousel').on('slid.qs', function (e, active) {
